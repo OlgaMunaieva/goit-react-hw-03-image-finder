@@ -3,6 +3,7 @@ import fetchPhotosWithQuery from 'api/api';
 import Searchbar from './search_bar/Searchbar';
 import ImageGallery from './image_gallery/ImageGallery';
 import Button from './button/Button';
+import Loader from './loader/Loader';
 
 export class App extends Component {
   state = {
@@ -63,7 +64,7 @@ export class App extends Component {
   // }
 
   render() {
-    const { query, page, photos } = this.state;
+    const { query, page, photos, isLoading } = this.state;
     console.log(query);
     console.log(page);
     console.log(photos);
@@ -73,7 +74,10 @@ export class App extends Component {
         {photos.length && query ? (
           <ImageGallery photos={photos} page={page} />
         ) : null}
-        {photos.length && query ? <Button onClick={this.nextPage} /> : null}
+        {photos.length && query && !isLoading ? (
+          <Button onClick={this.nextPage} />
+        ) : null}
+        {isLoading ? <Loader /> : null}
       </>
     );
   }
