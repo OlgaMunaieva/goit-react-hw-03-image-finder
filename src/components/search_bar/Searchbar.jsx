@@ -1,9 +1,8 @@
-// import PropTypes from 'prop-types';
 import '../styles.css';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export class Searchbar extends Component {
+class Searchbar extends Component {
   static propTypes = {
     getSearchQuery: PropTypes.func.isRequired,
   };
@@ -11,14 +10,16 @@ export class Searchbar extends Component {
     searchQuery: '',
   };
 
-  handleChange = event => {
-    this.setState({ searchQuery: event.target.value });
+  handleChange = ({ target: { value } }) => {
+    this.setState({ searchQuery: value });
   };
 
-  resetForm = input => {
-    input.value = this.state.searchQuery;
+  setForm = ({ value }) => {
+    console.log(value);
+    value = this.state.searchQuery;
+    console.log(value);
     console.log(this.state.searchQuery);
-    this.setState({ searchQuery: input.value });
+    this.setState({ searchQuery: value });
   };
 
   handleOnSubmit = event => {
@@ -27,7 +28,7 @@ export class Searchbar extends Component {
     this.setState({ searchQuery: event.target.value });
     console.log(this.state.searchQuery);
     this.props.getSearchQuery(this.state.searchQuery);
-    this.resetForm(event.target);
+    this.setForm(event.target);
   };
 
   render() {
@@ -52,3 +53,5 @@ export class Searchbar extends Component {
     );
   }
 }
+
+export default Searchbar;
