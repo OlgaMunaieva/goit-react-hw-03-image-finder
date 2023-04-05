@@ -16,16 +16,17 @@ export class App extends Component {
 
   async uploadPhotos(query) {
     this.setState({ isLoading: true });
-    console.log(this.state.query);
-    console.log(this.state.page);
+
     try {
-      const data = await fetchPhotosWithQuery(query, this.state.page);
-      if (!data.totalHits) {
+      const { totalHits, hits } = await fetchPhotosWithQuery(
+        query,
+        this.state.page
+      );
+      if (!totalHits) {
         throw new Error('No data');
       }
-      console.log(data);
-      console.log(data.hits);
-      this.setState(p => ({ photos: [...p.photos, ...data.hits] }));
+
+      this.setState(p => ({ photos: [...p.photos, ...hits] }));
     } catch (error) {
       this.setState({ error });
     } finally {
@@ -34,11 +35,10 @@ export class App extends Component {
   }
 
   getSearchQuery = searchQuery => {
-    console.log(searchQuery);
     if (this.state.query !== searchQuery) {
       this.setState({ query: searchQuery });
       this.setState({ photos: [] });
-      console.log(this.state.query);
+      this.setState({ page: 1 });
       this.uploadPhotos(searchQuery);
     }
   };
@@ -47,7 +47,6 @@ export class App extends Component {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
-    // this.uploadPhotos(this.state.query);
   };
 
   componentDidUpdate(_, prevState) {
@@ -56,25 +55,15 @@ export class App extends Component {
     }
   }
 
-  // componentDidUpdate(_, prevState) {
-  //   // Typical usage (don't forget to compare props):
-  //   if (this.state.page !== prevState.state.page) {
-  //     this.uploadPhotos(this.state.query);
-  //   }
-  // }
-
   render() {
     const { query, page, photos, isLoading } = this.state;
-    console.log(query);
-    console.log(page);
-    console.log(photos);
     return (
       <>
-        <Searchbar getSearchQuery={this.getSearchQuery} />
+        <Searchbar onSubmit={this.getSearchQuery} />
         {photos.length && query ? (
           <ImageGallery photos={photos} page={page} />
         ) : null}
-        {photos.length && query && !isLoading ? (
+        {photos.length && query && !isLoading && !(photos.length % 12) ? (
           <Button onClick={this.nextPage} />
         ) : null}
         {isLoading ? <Loader /> : null}

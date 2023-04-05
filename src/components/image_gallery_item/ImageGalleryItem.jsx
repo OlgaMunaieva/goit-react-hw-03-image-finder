@@ -1,9 +1,14 @@
 import '../styles.css';
 import { Component } from 'react';
-// import * as basicLightbox from 'basiclightbox';
-// import Modal from 'components/modal/Modal';
+import PropTypes from 'prop-types';
 
 class ImageGalleryItem extends Component {
+  static propTypes = {
+    src: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+    largeImage: PropTypes.string.isRequired,
+    isShowModal: PropTypes.func.isRequired,
+  };
   static defaultProps = {
     src: '',
     alt: '',
@@ -11,10 +16,8 @@ class ImageGalleryItem extends Component {
   };
 
   createModal = () => {
-    console.log(this.props.largeImage);
-    console.log(this.props.alt);
-    this.props.isShowModal(this.props.largeImage, this.props.alt);
-    // return <Modal src={this.props.largeImage} alt={this.props.alt} />;
+    const { largeImage, alt } = this.props;
+    this.props.isShowModal(largeImage, alt);
   };
 
   render() {

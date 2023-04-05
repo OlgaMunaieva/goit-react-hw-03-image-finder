@@ -1,10 +1,11 @@
 import '../styles.css';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { FiSearch } from 'react-icons/fi';
 
 class Searchbar extends Component {
   static propTypes = {
-    getSearchQuery: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
   };
   state = {
     searchQuery: '',
@@ -15,33 +16,30 @@ class Searchbar extends Component {
   };
 
   setForm = ({ value }) => {
-    console.log(value);
     value = this.state.searchQuery;
-    console.log(value);
-    console.log(this.state.searchQuery);
     this.setState({ searchQuery: value });
   };
 
   handleOnSubmit = event => {
     event.preventDefault();
-    console.log(event.target);
     this.setState({ searchQuery: event.target.value });
-    console.log(this.state.searchQuery);
-    this.props.getSearchQuery(this.state.searchQuery);
+    this.props.onSubmit(this.state.searchQuery);
     this.setForm(event.target);
   };
 
   render() {
+    const { handleOnSubmit, handleChange } = this;
     return (
       <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.handleOnSubmit}>
+        <form className="SearchForm" onSubmit={handleOnSubmit}>
           <button type="submit" className="SearchForm-button">
-            <span className="SearchForm-button-label">Search</span>
+            <FiSearch />
+            {/* <span className="SearchForm-button-label">Search</span> */}
           </button>
 
           <input
             className="SearchForm-input"
-            onChange={this.handleChange}
+            onChange={handleChange}
             value={this.state.searchQuery}
             type="search"
             autoComplete="off"

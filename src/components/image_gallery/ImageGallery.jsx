@@ -1,10 +1,14 @@
 import ImageGalleryItem from 'components/image_gallery_item/ImageGalleryItem';
 import '../styles.css';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Component } from 'react';
 import Modal from 'components/modal/Modal';
 
 class ImageGallery extends Component {
+  static propTypes = {
+    photos: PropTypes.arrayOf(PropTypes.object).isRequired,
+    page: PropTypes.number.isRequired,
+  };
   state = {
     isShowModal: false,
     largeImage: '',
@@ -15,8 +19,6 @@ class ImageGallery extends Component {
     this.setState({ isShowModal: true });
     this.setState({ largeImage: largeImage });
     this.setState({ alt: alt });
-    console.log(largeImage);
-    console.log(alt);
   };
 
   hideModal = () => {
@@ -24,50 +26,29 @@ class ImageGallery extends Component {
   };
 
   render() {
+    const { isShowModal, largeImage, alt } = this.state;
+    const { hideModal, showModal } = this;
     return (
       <>
-        {this.state.isShowModal && (
-          <Modal
-            src={this.state.largeImage}
-            alt={this.state.alt}
-            onClick={this.hideModal}
-          />
+        {isShowModal && (
+          <Modal src={largeImage} alt={alt} onClick={hideModal} />
         )}
         <ul className="ImageGallery">
-          {this.props.photos.map(photo => (
-            <ImageGalleryItem
-              key={photo.id}
-              src={photo.webformatURL}
-              alt={photo.tags}
-              largeImage={photo.largeImageURL}
-              isShowModal={this.showModal}
-              // isHideModal={this.hideModal}
-            />
-          ))}
+          {this.props.photos.map(
+            ({ id, webformatURL, tags, largeImageURL }) => (
+              <ImageGalleryItem
+                key={id}
+                src={webformatURL}
+                alt={tags}
+                largeImage={largeImageURL}
+                isShowModal={showModal}
+              />
+            )
+          )}
         </ul>
       </>
     );
   }
 }
-
-// const ImageGallery = ({ photos }) => {
-//   console.log(photos);
-//   return (
-//     <ul className="ImageGallery">
-//       {photos.map(photo => (
-//         <ImageGalleryItem
-//           key={photo.id}
-//           src={photo.webformatURL}
-//           alt={photo.tags}
-//           largeImage={photo.largeImageURL}
-//         />
-//       ))}
-//     </ul>
-//   );
-// };
-
-// ImageGallery.propTypes = {
-//   photos: PropTypes.array.isRequired,
-// };
 
 export default ImageGallery;
