@@ -36,10 +36,8 @@ export class App extends Component {
 
   getSearchQuery = searchQuery => {
     if (this.state.query !== searchQuery) {
-      this.setState({ query: searchQuery });
-      this.setState({ photos: [] });
-      this.setState({ page: 1 });
-      this.uploadPhotos(searchQuery);
+      this.setState({ query: searchQuery, photos: [], page: 1 });
+      // this.uploadPhotos(searchQuery);
     }
   };
 
@@ -50,7 +48,10 @@ export class App extends Component {
   };
 
   componentDidUpdate(_, prevState) {
-    if (prevState.page !== this.state.page) {
+    if (
+      prevState.page !== this.state.page ||
+      prevState.query !== this.state.query
+    ) {
       this.uploadPhotos(this.state.query);
     }
   }

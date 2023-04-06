@@ -8,25 +8,27 @@ class Modal extends Component {
     alt: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
   };
+
+  closeModal = e => {
+    if (e.code === 'Escape') {
+      this.props.onClick();
+    }
+  };
+
   componentDidMount() {
-    window.addEventListener('keydown', e => {
-      if (e.code === 'Escape') {
-        this.props.onClick();
-      }
-    });
+    window.addEventListener('keydown', this.closeModal);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.closeModal);
+  }
+
   render() {
     const { src, alt, onClick } = this.props;
     return (
-      <div className="Overlay">
+      <div className="Overlay" onClick={() => onClick()}>
         <div className="Modal">
-          <img
-            src={src}
-            alt={alt}
-            width="800"
-            height="600"
-            onClick={() => onClick()}
-          />
+          <img src={src} alt={alt} width="800" height="600" />
         </div>
       </div>
     );
