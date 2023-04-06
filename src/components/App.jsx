@@ -57,13 +57,13 @@ export class App extends Component {
 
   render() {
     const { query, page, photos, isLoading } = this.state;
-    const showImageGallery = photos.length > 0 && query;
-    const showButton = showImageGallery && !isLoading && !(photos.length % 12);
+    const isShowGallery = photos.length > 0 && query;
+    const isShowButton = isShowGallery && !isLoading && !(photos.length % 12);
     return (
       <>
         <Searchbar onSubmit={this.getSearchQuery} />
-        {showImageGallery && <ImageGallery photos={photos} page={page} />}
-        {showButton && <Button onClick={this.nextPage} />}
+        {isShowGallery && <ImageGallery photos={photos} page={page} />}
+        {isShowButton && <Button onClick={this.nextPage} />}
         {isLoading && <Loader />}
       </>
     );
