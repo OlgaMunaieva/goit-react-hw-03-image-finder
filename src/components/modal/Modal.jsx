@@ -9,12 +9,6 @@ class Modal extends Component {
     onClick: PropTypes.func.isRequired,
   };
 
-  closeModal = e => {
-    if (e.code === 'Escape') {
-      this.props.onClick();
-    }
-  };
-
   componentDidMount() {
     window.addEventListener('keydown', this.closeModal);
   }
@@ -23,10 +17,16 @@ class Modal extends Component {
     window.removeEventListener('keydown', this.closeModal);
   }
 
+  closeModal = ({ target, currentTarget, code }) => {
+    if (code === 'Escape' || target === currentTarget) {
+      this.props.onClick();
+    }
+  };
+
   render() {
-    const { src, alt, onClick } = this.props;
+    const { src, alt } = this.props;
     return (
-      <div className="Overlay" onClick={() => onClick()}>
+      <div className="Overlay" onClick={this.closeModal}>
         <div className="Modal">
           <img src={src} alt={alt} width="800" height="600" />
         </div>

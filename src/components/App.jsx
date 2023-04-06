@@ -37,7 +37,6 @@ export class App extends Component {
   getSearchQuery = searchQuery => {
     if (this.state.query !== searchQuery) {
       this.setState({ query: searchQuery, photos: [], page: 1 });
-      // this.uploadPhotos(searchQuery);
     }
   };
 
@@ -58,15 +57,15 @@ export class App extends Component {
 
   render() {
     const { query, page, photos, isLoading } = this.state;
+    const showButton =
+      photos.length && query && !isLoading && !(photos.length % 12);
     return (
       <>
         <Searchbar onSubmit={this.getSearchQuery} />
         {photos.length && query ? (
           <ImageGallery photos={photos} page={page} />
         ) : null}
-        {photos.length && query && !isLoading && !(photos.length % 12) ? (
-          <Button onClick={this.nextPage} />
-        ) : null}
+        {showButton ? <Button onClick={this.nextPage} /> : null}
         {isLoading ? <Loader /> : null}
       </>
     );
