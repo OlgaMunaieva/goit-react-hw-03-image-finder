@@ -14,12 +14,12 @@ export class App extends Component {
     error: null,
   };
 
-  async uploadPhotos(query) {
+  async uploadPhotos() {
     this.setState({ isLoading: true });
 
     try {
       const { totalHits, hits } = await fetchPhotosWithQuery(
-        query,
+        this.state.query,
         this.state.page
       );
       if (!totalHits) {
@@ -51,7 +51,7 @@ export class App extends Component {
       prevState.page !== this.state.page ||
       prevState.query !== this.state.query
     ) {
-      this.uploadPhotos(this.state.query);
+      this.uploadPhotos();
     }
   }
 
